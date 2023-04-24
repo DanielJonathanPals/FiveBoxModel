@@ -49,18 +49,18 @@ end
 
 
 # Read the value of a specific silinity of a given system
-Sn(sys::System) = sys.salinities[1]
-St(sys::System) = sys.salinities[2]
-Ss(sys::System) = sys.salinities[3]
-Sip(sys::System) = sys.salinities[4]
-Sb(sys::System) = sys.salinities[5]
+get_S_N(sys::System) = sys.salinities[1]
+get_S_T(sys::System) = sys.salinities[2]
+get_S_S(sys::System) = sys.salinities[3]
+get_S_IP(sys::System) = sys.salinities[4]
+get_S_B(sys::System) = sys.salinities[5]
 
 # Change the value of a specific silinity of a given system
-Sn!(sys::System, s::Number) = sys.salinities[1] = Float64(s)
-St!(sys::System, s::Number) = sys.salinities[2] = Float64(s)
-Ss!(sys::System, s::Number) = sys.salinities[3] = Float64(s)
-Sip!(sys::System, s::Number) = sys.salinities[4] = Float64(s)
-Sb!(sys::System, s::Number) = sys.salinities[5] = Float64(s)
+up_S_N!(sys::System, s::Number) = sys.salinities[1] = Float64(s)
+up_S_T!(sys::System, s::Number) = sys.salinities[2] = Float64(s)
+up_S_S!(sys::System, s::Number) = sys.salinities[3] = Float64(s)
+up_S_IP!(sys::System, s::Number) = sys.salinities[4] = Float64(s)
+up_S_B!(sys::System, s::Number) = sys.salinities[5] = Float64(s)
 
 
 # FAMOUS System
