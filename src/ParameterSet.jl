@@ -64,28 +64,28 @@ Updates the given ParameterSet with the values given in the Array.
 """
 function updateParameterSet!(params::ParameterSet, arr::Array)
     if length(arr) != 21
-        error("The array should be of length 21")
+        error("The array should have length 21")
     end
-    params.λ = arr[1],
-    params.α = arr[2],
-    params.β = arr[3],
-    params.γ = arr[4],
-    params.η = arr[5],
-    params.μ = arr[6],
-    params.V_N = arr[7],
-    params.V_S = arr[8],
-    params.V_T = arr[9],
-    params.V_IP = arr[10],
-    params.V_B = arr[11],
-    params.K_N = arr[12],
-    params.K_S = arr[13],
-    params.K_IP = arr[14],
-    params.F_N = arr[15],
-    params.F_S = arr[16],
-    params.F_T = arr[17],
-    params.F_IP = arr[18],
-    params.S_0 = arr[19],
-    params.T_0 = arr[20],
+    params.λ = arr[1]
+    params.α = arr[2]
+    params.β = arr[3]
+    params.γ = arr[4]
+    params.η = arr[5]
+    params.μ = arr[6]
+    params.V_N = arr[7]
+    params.V_S = arr[8]
+    params.V_T = arr[9]
+    params.V_IP = arr[10]
+    params.V_B = arr[11]
+    params.K_N = arr[12]
+    params.K_S = arr[13]
+    params.K_IP = arr[14]
+    params.F_N = arr[15]
+    params.F_S = arr[16]
+    params.F_T = arr[17]
+    params.F_IP = arr[18]
+    params.S_0 = arr[19]
+    params.T_0 = arr[20]
     params.T_S = arr[21]
 end
 

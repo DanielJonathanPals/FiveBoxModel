@@ -47,14 +47,6 @@ function System(;S_N::Number,
     System([S_N,S_T,S_S,S_IP,S_B],params)
 end
 
-
-# Read the value of a specific silinity of a given system
-get_S_N(sys::System) = sys.salinities[1]
-get_S_T(sys::System) = sys.salinities[2]
-get_S_S(sys::System) = sys.salinities[3]
-get_S_IP(sys::System) = sys.salinities[4]
-get_S_B(sys::System) = sys.salinities[5]
-
 # Change the value of a specific silinity of a given system
 up_S_N!(sys::System, s::Number) = sys.salinities[1] = Float64(s)
 up_S_T!(sys::System, s::Number) = sys.salinities[2] = Float64(s)
@@ -64,9 +56,9 @@ up_S_B!(sys::System, s::Number) = sys.salinities[5] = Float64(s)
 
 
 # FAMOUS System
-FAMOUS = System(S_N = 35.1,
-                S_T = 35.7,
-                S_S = 34.4,
-                S_IP = 34.7,
-                S_B = 34.6,
+FAMOUS = System(S_N = 35.088,
+                S_T = 35.670,
+                S_S = 34.441,
+                S_IP = 34.689,
+                S_B = 34.577,
                 params = FAMOUSparams)
