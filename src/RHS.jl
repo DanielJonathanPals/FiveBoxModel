@@ -25,7 +25,7 @@ function q(arr::Array{Float64})
     T_0 = get_T_0(arr)
     S_N = get_S_N(arr)
     S_S = get_S_S(arr)
-    return (λ/(1+1e-1*λ*α*μ))*(α*(T_S-T_0)+β*(S_N-S_S))*10
+    return (λ./(1 .+1e-1.*λ.*α.*μ)).*(α.*(T_S-T_0)+β.*(S_N-S_S)).*10
 end 
 
 
@@ -34,6 +34,8 @@ q(sys::System) = q(toArray(sys))
 
 # The following function return the RHS of the Differential Equations determining the dynamics of the 
 # salinities.
+# Note that the equations used here are not the same as the ones given by the paper since the equations
+# from the paper do not respect the water volume conservation of each box
 function rhs_S_N(arr::Array{Float64})
     Q = q(arr)
     V_N = get_V_N(arr)
@@ -159,3 +161,6 @@ rhs_S_T(sys::System) = rhs_S_T(toArray(sys))
 rhs_S_S(sys::System) = rhs_S_S(toArray(sys))
 rhs_S_IP(sys::System) = rhs_S_IP(toArray(sys))
 rhs_S_B(sys::System) = rhs_S_B(toArray(sys))
+
+get_q(arr::Array{Float64}) = q(arr)
+get_q(sys::System) = q(toArray(sys))

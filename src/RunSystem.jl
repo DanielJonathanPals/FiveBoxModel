@@ -91,7 +91,8 @@ end
     runSystem(rp::RunParameters; update_system = true)
 
 Runs the productspace System encoded in 'rp' according to the parameters in 'rp' and returns the 
-full trajectory of the time evolution. If 'update_system == true' then the system 'rp.sys' is
+full trajectory of the time evolution together with an array containing the respective times
+corresponding to the datapoints. If 'update_system == true' then the system 'rp.sys' is
 updated accordingly.
 """
 function runSystem(rp::RunParameters; update_system = true)
@@ -123,6 +124,9 @@ function runSystem(rp::RunParameters; update_system = true)
 
     # Set up array in which the trajectories are saved
     traj = zeros(26,total_length)
+
+    # Array containing all the times according to the datapoints of the trajectory
+    t = collect(0:rp.dt:rp.t_max)[1:end-1]
 
     println("Starting to integrate System...")
     println("the total time interval is subdivided into $numb_of_intervals subintervals")
@@ -160,5 +164,5 @@ function runSystem(rp::RunParameters; update_system = true)
         g!(du,u,p,t) = (rp.phaseDyn.g!(du,u,p,t); rp.paramDyn.g!(du,u,p,t))
         prob = SDEProblem(f!,g!,u₀,tspan,t_0,noise_rate_prototype=rp.paramDyn.noise_rate_prototype)
     end
-    return traj
+    return traj, t
 end
