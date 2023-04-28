@@ -154,14 +154,21 @@ function runSystem(rp::RunParameters; update_system = true)
         # 'rp.paramDyn.update'
         update!(rp.phaseDyn,past_traj)
         update!(rp.paramDyn,past_traj)
+
+        # Set the new initial conditions for the next subinterval
         u₀ = new_traj[:,end]
         t_0 = rp.updateInterval*(i+1)
-        #tspan = tspan .+ rp.updateInterval
+
+        # Update the values of the System if this is intended
         if update_system
             updateSystem!(rp.sys, u₀)
         end
+
+        # Update the equations describing the full Dynamics of both phase space and parameter space
         f!(du,u,p,t) = (rp.phaseDyn.f!(du,u,p,t); rp.paramDyn.f!(du,u,p,t))
         g!(du,u,p,t) = (rp.phaseDyn.g!(du,u,p,t); rp.paramDyn.g!(du,u,p,t))
+
+        # Update the SDEProblem
         prob = SDEProblem(f!,g!,u₀,tspan,t_0,noise_rate_prototype=rp.paramDyn.noise_rate_prototype)
     end
     return traj, t

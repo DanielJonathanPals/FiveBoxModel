@@ -61,22 +61,6 @@ function no_deterministic_param_dynamics!(du, u, t_0, t)
 end
 
 
-function hosing_experiment!(du, u, t_0, t)
-    H_1 = 5e-4
-
-    du[6:26] .= 0.
-    if t+t_0 <= 2000
-        sign = 1
-    else
-        sign = -1
-    end
-    du[20] = sign*H_1*0.194
-    du[21] = -sign*H_1*0.226
-    du[22] = sign*H_1*0.597
-    du[23] = -sign*H_1*0.565
-end
-
-
 function no_stochastic_param_dynamics!(du, u, t_0, t)
     du[6:26] .= 0.
 end
@@ -84,5 +68,3 @@ end
 
 fixedParameters = ParameterDynamics(no_deterministic_param_dynamics!,
                                     no_stochastic_param_dynamics!)
-
-hosingExperiment = ParameterDynamics(hosing_experiment!,no_stochastic_param_dynamics!)
