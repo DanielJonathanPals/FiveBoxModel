@@ -1,5 +1,6 @@
 include("RunSystem.jl")
 include("Plot.jl")
+include("Linearization.jl")
 
 
 # Here an implementation of the hosing experiment is presented
@@ -68,6 +69,9 @@ function hosing_traj(t)
     return H
 end
 
+H_det = hosing_traj(det_t)
+H_stoch = hosing_traj(stoch_t)
+
 # Now we are ready to instantiate the SinglePlot elements we need
 det_sal_plot = createSinglePlot("t",["S_N","S_T","S_S","S_IP","S_B"],
                                 det_traj,det_t,title="Deterministic time evolution of the salinities",
@@ -75,16 +79,25 @@ det_sal_plot = createSinglePlot("t",["S_N","S_T","S_S","S_IP","S_B"],
 stoch_sal_plot = createSinglePlot("t",["S_N","S_T","S_S","S_IP","S_B"],
                                 stoch_traj,stoch_t,title="Stochastic time evolution of the salinities",
                                 x_unit="years",y_unit="psu")
-det_hyst_plot = createSinglePlot(H,"q",det_traj,det_t,title="Hysteresis in the deterministic case",
+det_hyst_plot = createSinglePlot(H_det,"q",det_traj,det_t,title="Hysteresis in the deterministic case",
                                 x_label="Hosing",x_unit="10⁶m³s⁻¹",y_unit="10⁶m³s⁻¹")
-stoch_hyst_plot = createSinglePlot(H,"q",stoch_traj,stoch_t,title="Hysteresis in the stochastic case",
+stoch_hyst_plot = createSinglePlot(H_stoch,"q",stoch_traj,stoch_t,title="Hysteresis in the stochastic case",
                                     x_label="Hosing",x_unit="10⁶m³s⁻¹",y_unit="10⁶m³s⁻¹")
 
 # To check wether the plots look good on their own we could use e.g. 'det_sal_plot()'
 
 # In order to combine all plots into one we unse the 'combine_plots' function
-fig,axis = combine_plots([det_sal_plot,stoch_sal_plot,det_hyst_plot,stoch_hyst_plot],
+fig1,axis1 = combine_plots([det_sal_plot,stoch_sal_plot,det_hyst_plot,stoch_hyst_plot],
                         [[1,1:2],[2,1:2],[1,3],[2,3]],resolution=(1200,800))
 
-fig
 
+
+
+
+
+eigenvals_plot = createSinglePlot("t",real.(get_eigvals(det_traj)),det_traj,det_t,
+                                    title="Time evolution of the eigenvalues",
+                                    y_label="eigenvalues",x_unit="s",y_unit="psu/s")
+
+fig2,axis2 = combine_plots([det_sal_plot,eigenvals_plot],
+                            [[1,1:2],[2,1:2]],resolution=(600,800))

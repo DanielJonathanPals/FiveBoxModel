@@ -221,8 +221,7 @@ function createSinglePlot(x::Union{Vector{Float64},String},
         end
     end
 
-    return SinglePlot(x,y_new;title=title,x_label=x_label,y_label=y_label,
-                        x_unit=x_unit,y_unit=y_unit,y_legend=y_legend)
+    return SinglePlot(x,y_new,title,x_label,y_label,x_unit,y_unit,y_legend)
 end
 
 
