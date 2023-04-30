@@ -3,9 +3,7 @@
 # to larger more complex organized plots
 
 using GLMakie
-
-include("SystemArrayConverter.jl")
-include("RHS.jl")
+using .RHS_module
 
 
 # This function turns a strin e.g. "S_N" into the function get_S_N which can then be

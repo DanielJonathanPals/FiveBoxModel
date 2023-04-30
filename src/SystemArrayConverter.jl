@@ -1,7 +1,6 @@
 # Here the back and forth conversion from the information in a System to an Array is implemented
 
 include("System.jl")
-include("ParameterSet.jl")
 
 
 """

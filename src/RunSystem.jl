@@ -5,7 +5,6 @@ using DifferentialEquations
 
 include("ParameterDynamics.jl")
 include("PhaseDynamics.jl")
-include("SystemArrayConverter.jl")
 
 
 

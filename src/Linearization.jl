@@ -1,7 +1,9 @@
 using LinearAlgebra
 
-include("RHS.jl")
-include("SystemArrayConverter.jl")
+using .RHS_module
+
+# Number of seconds in a year
+year = 60*60*24*365.25
 
 
 function dq_dS_N(arr::Vector{Float64})
@@ -19,7 +21,7 @@ end
 
 
 function linearization(arr::Vector{Float64})
-    Q = q(arr)
+    Q = get_q(arr)
     γ = get_γ(arr)
     η = get_η(arr)
     V_N = get_V_N(arr)
@@ -93,7 +95,7 @@ function linearization(arr::Vector{Float64})
                         0,
                         η/V_S,
                         0,
-                        (Q-η-F_S-F_T-F_IP)/V_B],5,5)
+                        (Q-η-F_S-F_T-F_IP)/V_B],5,5) .* (year*1e-10)
     end
 end
 

@@ -1,6 +1,6 @@
 # Here the dynamics of the phase space is specified
 
-include("RHS.jl")
+using .RHS_module
 
 
 """

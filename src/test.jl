@@ -1,6 +1,4 @@
-include("RunSystem.jl")
-include("Plot.jl")
-include("Linearization.jl")
+include("FiveBoxModel.jl")
 
 
 # Here an implementation of the hosing experiment is presented

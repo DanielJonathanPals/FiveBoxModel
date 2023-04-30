@@ -1,8 +1,6 @@
 # This file contains the deterministic part of the RHS of the differential equations driving the 5 Box
 # model.
 
-include("ParameterSet.jl")
-include("System.jl")
 include("SystemArrayConverter.jl")
 
 
