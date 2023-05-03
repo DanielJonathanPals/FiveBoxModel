@@ -10,8 +10,10 @@ export fixedParameters
 
 export PhaseDynamics
 export deterministic_salinity_dynamics!
+export original_deterministic_salinity_dynamics!
 export no_stochstic_salinity_dynamics!
 export DeterministicPhaseDynamics
+export OriginalDeterministicPhaseDynamics
 
 export ParameterSet
 export FAMOUSparams

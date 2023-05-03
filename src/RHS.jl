@@ -34,7 +34,7 @@ q(sys::System) = q(toArray(sys))
 # salinities.
 # Note that the equations used here are not the same as the ones given by the paper since the equations
 # from the paper do not respect the water volume conservation of each box
-function rhs_S_N(arr::Array{Float64})
+function rhs_S_N(arr::Array{Float64}; original::Bool = false)
     Q = q(arr)
     V_N = get_V_N(arr)
     S_0 = get_S_0(arr)
@@ -47,16 +47,22 @@ function rhs_S_N(arr::Array{Float64})
     S_N = get_S_N(arr)
     S_B = get_S_B(arr)
     if Q >= 0
-        # return (Q*(S_T-S_N)+K_N*(S_T-S_N)-F_N*S_0)/V_N
-        return (Q*(S_T-S_N)+K_N*(S_T-S_N)+F_N*S_0-F_N*S_N)/V_N*year*1e-10
+        if original
+            return (Q*(S_T-S_N)+K_N*(S_T-S_N)-F_N*S_0)/V_N*year*1e-10
+        else
+            return (Q*(S_T-S_N)+K_N*(S_T-S_N)+F_N*S_0-F_N*S_N)/V_N*year*1e-10
+        end
     else
-        # return (abs(Q)*(S_B-S_N)+K_N*(S_T-S_N)-F_N*S_0)/V_N
-        return (abs(Q)*(S_B-S_N)+K_N*(S_T-S_N)+F_N*S_0+(F_T+F_S+F_IP)*S_B)/V_N*year*1e-10
+        if original
+            return (abs(Q)*(S_B-S_N)+K_N*(S_T-S_N)-F_N*S_0)/V_N*year*1e-10
+        else
+            return (abs(Q)*(S_B-S_N)+K_N*(S_T-S_N)+F_N*S_0+(F_T+F_S+F_IP)*S_B)/V_N*year*1e-10
+        end
     end
 end
 
 
-function rhs_S_T(arr::Array{Float64})
+function rhs_S_T(arr::Array{Float64}; original::Bool = false)
     Q = q(arr)
     γ = get_γ(arr)
     V_T = get_V_T(arr)
@@ -72,16 +78,22 @@ function rhs_S_T(arr::Array{Float64})
     S_S = get_S_S(arr)
     S_IP = get_S_IP(arr)
     if Q >= 0
-        # return (Q*(γ*S_S+(1-γ)*S_IP-S_T)+K_S*(S_S-S_T)+K_N*(S_N-S_T)-F_T*S_0)/V_T
-        return (Q*(γ*S_S+(1-γ)*S_IP-S_T)+K_S*(S_S-S_T)+K_N*(S_N-S_T)+F_T*S_0+F_N*(γ*S_S+(1-γ)*S_IP)+F_S*S_S+F_IP*S_IP)/V_T*year*1e-10
+        if original
+            return (Q*(γ*S_S+(1-γ)*S_IP-S_T)+K_S*(S_S-S_T)+K_N*(S_N-S_T)-F_T*S_0)/V_T*year*1e-10
+        else
+            return (Q*(γ*S_S+(1-γ)*S_IP-S_T)+K_S*(S_S-S_T)+K_N*(S_N-S_T)+F_T*S_0+F_N*(γ*S_S+(1-γ)*S_IP)+F_S*S_S+F_IP*S_IP)/V_T*year*1e-10
+        end
     else
-        # return (abs(Q)*(S_N-S_T)+K_S*(S_S-S_T)+K_N*(S_N-S_T)-F_T*S_0)/V_T
-        return (abs(Q)*(S_N-S_T)+K_S*(S_S-S_T)+K_N*(S_N-S_T)+F_T*S_0-F_T*S_T)/V_T*year*1e-10
+        if original
+            return (abs(Q)*(S_N-S_T)+K_S*(S_S-S_T)+K_N*(S_N-S_T)-F_T*S_0)/V_T*year*1e-10
+        else
+            return (abs(Q)*(S_N-S_T)+K_S*(S_S-S_T)+K_N*(S_N-S_T)+F_T*S_0-F_T*S_T)/V_T*year*1e-10
+        end
     end
 end
 
 
-function rhs_S_S(arr::Array{Float64})
+function rhs_S_S(arr::Array{Float64}; original::Bool = false)
     Q = q(arr)
     γ = get_γ(arr)
     η = get_η(arr)
@@ -98,16 +110,22 @@ function rhs_S_S(arr::Array{Float64})
     S_S = get_S_S(arr)
     S_IP = get_S_IP(arr)
     if Q >= 0
-        # return (Q*γ*(S_B-S_S)+K_IP*(S_IP-S_S)+K_S*(S_T-S_S)+η*(S_B-S_S)-F_S*S_0)/V_S
-        return (Q*γ*(S_B-S_S)+K_IP*(S_IP-S_S)+K_S*(S_T-S_S)+η*(S_B-S_S)+F_S*S_0+γ*F_N*(S_B-S_S)-F_S*S_S)/V_S*year*1e-10
+        if original
+            return (Q*γ*(S_B-S_S)+K_IP*(S_IP-S_S)+K_S*(S_T-S_S)+η*(S_B-S_S)-F_S*S_0)/V_S*year*1e-10
+        else
+            return (Q*γ*(S_B-S_S)+K_IP*(S_IP-S_S)+K_S*(S_T-S_S)+η*(S_B-S_S)+F_S*S_0+γ*F_N*(S_B-S_S)-F_S*S_S)/V_S*year*1e-10
+        end
     else
-        # return (abs(Q)*γ*(S_T-S_S)+K_IP*(S_IP-S_S)+K_S*(S_T-S_S)+η*(S_B-S_S)-F_S*S_0)/V_S
-        return (abs(Q)*γ*(S_T-S_S)+K_IP*(S_IP-S_S)+K_S*(S_T-S_S)+η*(S_B-S_S)+F_S*S_0+γ*F_T*(S_T-S_S)-F_S*S_S)/V_S*year*1e-10
+        if original
+            return (abs(Q)*γ*(S_T-S_S)+K_IP*(S_IP-S_S)+K_S*(S_T-S_S)+η*(S_B-S_S)-F_S*S_0)/V_S*year*1e-10
+        else
+            return (abs(Q)*γ*(S_T-S_S)+K_IP*(S_IP-S_S)+K_S*(S_T-S_S)+η*(S_B-S_S)+F_S*S_0+γ*F_T*(S_T-S_S)-F_S*S_S)/V_S*year*1e-10
+        end
     end
 end
 
 
-function rhs_S_IP(arr::Array{Float64})
+function rhs_S_IP(arr::Array{Float64}; original::Bool = false)
     Q = q(arr)
     γ = get_γ(arr)
     V_IP = get_V_IP(arr)
@@ -122,16 +140,22 @@ function rhs_S_IP(arr::Array{Float64})
     S_S = get_S_S(arr)
     S_IP = get_S_IP(arr)
     if Q >= 0
-        # return (Q*(1-γ)*(S_B-S_IP)+K_IP*(S_S-S_IP)-F_IP*S_0)/V_IP
-        return (Q*(1-γ)*(S_B-S_IP)+K_IP*(S_S-S_IP)+F_IP*S_0+(1-γ)*F_N*(S_B-S_IP)-F_IP*S_IP)/V_IP*year*1e-10
+        if original
+            return (Q*(1-γ)*(S_B-S_IP)+K_IP*(S_S-S_IP)-F_IP*S_0)/V_IP*year*1e-10
+        else
+            return (Q*(1-γ)*(S_B-S_IP)+K_IP*(S_S-S_IP)+F_IP*S_0+(1-γ)*F_N*(S_B-S_IP)-F_IP*S_IP)/V_IP*year*1e-10
+        end
     else
-        # return (abs(Q)*(1-γ)*(S_T-S_IP)+K_IP*(S_S-S_IP)-F_IP*S_0)/V_IP
-        return (abs(Q)*(1-γ)*(S_T-S_IP)+K_IP*(S_S-S_IP)+F_IP*S_0+(1-γ)*F_T*(S_T-S_IP)-F_IP*S_IP)/V_IP*year*1e-10
+        if original
+            return (abs(Q)*(1-γ)*(S_T-S_IP)+K_IP*(S_S-S_IP)-F_IP*S_0)/V_IP*year*1e-10
+        else
+            return (abs(Q)*(1-γ)*(S_T-S_IP)+K_IP*(S_S-S_IP)+F_IP*S_0+(1-γ)*F_T*(S_T-S_IP)-F_IP*S_IP)/V_IP*year*1e-10
+        end
     end
 end
 
 
-function rhs_S_B(arr::Array{Float64})
+function rhs_S_B(arr::Array{Float64}; original::Bool = false)
     Q = q(arr)
     η = get_η(arr)
     γ = get_γ(arr)
@@ -145,11 +169,17 @@ function rhs_S_B(arr::Array{Float64})
     F_S = get_F_S(arr)
     F_IP = get_F_IP(arr)
     if Q >= 0
-        # return (Q*(S_N-S_B)+η*(S_S-S_B))/V_B
-        return (Q*(S_N-S_B)+η*(S_S-S_B)+F_N*(S_N-S_B))/V_B*year*1e-10
+        if original
+            return (Q*(S_N-S_B)+η*(S_S-S_B))/V_B*year*1e-10
+        else
+            return (Q*(S_N-S_B)+η*(S_S-S_B)+F_N*(S_N-S_B))/V_B*year*1e-10
+        end
     else
-        # return (abs(Q)*γ*S_S+(1-γ)*abs(Q)*S_IP-abs(Q)*S_B+η*(S_S-S_B))/V_B
-        return (abs(Q)*γ*S_S+(1-γ)*abs(Q)*S_IP-abs(Q)*S_B+η*(S_S-S_B)+F_T*(γ*S_S+(1-γ)*S_IP-S_B)+F_S*(S_S-S_B)+F_IP*(S_IP-S_B))/V_B*year*1e-10
+        if original
+            return (abs(Q)*γ*S_S+(1-γ)*abs(Q)*S_IP-abs(Q)*S_B+η*(S_S-S_B))/V_B*year*1e-10
+        else
+            return (abs(Q)*γ*S_S+(1-γ)*abs(Q)*S_IP-abs(Q)*S_B+η*(S_S-S_B)+F_T*(γ*S_S+(1-γ)*S_IP-S_B)+F_S*(S_S-S_B)+F_IP*(S_IP-S_B))/V_B*year*1e-10
+        end
     end
 end
 

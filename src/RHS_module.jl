@@ -3,6 +3,10 @@ module RHS_module
 export System
 export FAMOUS
 
+export ParameterSet
+export updateParameterSet!
+export FAMOUSparams
+
 export toArray
 export updateSystem!
 

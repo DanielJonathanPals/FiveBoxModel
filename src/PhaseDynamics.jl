@@ -61,6 +61,14 @@ function deterministic_salinity_dynamics!(du, u, t_0, t)
     du[1:5] = [rhs_S_N(u),rhs_S_T(u),rhs_S_S(u),rhs_S_IP(u),rhs_S_B(u)]
 end
 
+function original_deterministic_salinity_dynamics!(du, u, t_0, t)
+    du[1:5] = [rhs_S_N(u,original=true),
+                rhs_S_T(u,original=true),
+                rhs_S_S(u,original=true),
+                rhs_S_IP(u,original=true),
+                rhs_S_B(u,original=true)]
+end
+
 
 function no_stochstic_salinity_dynamics!(du, u, t_0, t)
     du[1:5] .= 0
@@ -69,4 +77,7 @@ end
 
 DeterministicPhaseDynamics = PhaseDynamics(deterministic_salinity_dynamics!,
                                             no_stochstic_salinity_dynamics!)
+
+OriginalDeterministicPhaseDynamics = PhaseDynamics(original_deterministic_salinity_dynamics!,
+                                                    no_stochstic_salinity_dynamics!)
 
