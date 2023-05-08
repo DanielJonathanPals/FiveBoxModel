@@ -8,7 +8,3 @@ Documentation for [FiveBoxModel](https://github.com/DanielJonathanPals/FiveBoxMo
 
 ```@index
 ```
-
-```@autodocs
-Modules = [FiveBoxModel]
-```

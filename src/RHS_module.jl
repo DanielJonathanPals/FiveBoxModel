@@ -18,6 +18,7 @@ export rhs_S_B
 
 export get_q
 
+export get_index
 export get_S_N
 export get_S_T
 export get_S_S

@@ -52,6 +52,43 @@ function updateSystem!(sys::System, arr::Array{Float64})
 end
 
 
+"""
+    get_index
+
+When converting objects of type `System` into Arrays it might be confusiong to ceep track
+    to which entry in the array encodes which variable. The dictionary `get_index` encodes
+    exactly this information where the keys are the names of the respective variables.
+"""
+get_index = Dict("S_N" => 1,
+                "S_T" => 2,
+                "S_S" => 3,
+                "S_IP" => 4,
+                "S_B" => 5,
+                "λ" => 6,
+                "α" => 7,
+                "β" => 8,
+                "γ" => 9,
+                "η" => 10,
+                "μ" => 11,
+                "V_N" => 12,
+                "V_S" => 13,
+                "V_T" => 14,
+                "V_IP" => 15,
+                "V_B" => 16,
+                "K_N" => 17,
+                "K_S" => 18,
+                "K_IP" => 19,
+                "F_N" => 20,
+                "F_S" => 21,
+                "F_T" => 22,
+                "F_IP" => 23,
+                "S_0" => 24,
+                "T_0" => 25,
+                "T_S" => 26,
+                "parameters" => 6:26,
+                "salinities" => 1:5)
+
+
 # get the respective parameter Values from array
 get_S_N(arr::Array{Float64}) = ((ndims(arr) == 1) ? arr[1] : arr[1,:])
 get_S_T(arr::Array{Float64}) = ((ndims(arr) == 1) ? arr[2] : arr[2,:])

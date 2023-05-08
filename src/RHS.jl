@@ -12,7 +12,7 @@ year = 60*60*24*365.25
     q(arr::Array{Float64}) 
 
 Returns the value of q of a given system. To this end the euqations q = λ[α(Tₛ-Tₙ)+β(Sₙ-Sₛ)] and
-Tₙ = μ⋅q+T₀ where solved for q
+    Tₙ = μ⋅q+T₀ where solved for q
 """
 function q(arr::Array{Float64}) 
     λ = get_λ(arr)
@@ -34,6 +34,20 @@ q(sys::System) = q(toArray(sys))
 # salinities.
 # Note that the equations used here are not the same as the ones given by the paper since the equations
 # from the paper do not respect the water volume conservation of each box
+"""
+    rhs_S_N(arr::Array{Float64}; original::Bool = false)
+
+# Arguments
+
+- `arr::Array{Float64}`: Array of length 26 containing the current state of the system at which the
+    RHS of the ODE is to be determined
+- `original::Bool`: If false then the modified version of the RHS of the ODE is returned and if true
+    then the original version as presented in the paper is used
+
+# Returns
+
+The RHS of the ODE describing the rate of change of the varialbe `S_N`
+"""
 function rhs_S_N(arr::Array{Float64}; original::Bool = false)
     Q = q(arr)
     V_N = get_V_N(arr)
@@ -62,6 +76,20 @@ function rhs_S_N(arr::Array{Float64}; original::Bool = false)
 end
 
 
+"""
+    rhs_S_T(arr::Array{Float64}; original::Bool = false)
+
+# Arguments
+
+- `arr::Array{Float64}`: Array of length 26 containing the current state of the system at which the
+    RHS of the ODE is to be determined
+- `original::Bool`: If false then the modified version of the RHS of the ODE is returned and if true
+    then the original version as presented in the paper is used
+
+# Returns
+
+The RHS of the ODE describing the rate of change of the varialbe `S_T`
+"""
 function rhs_S_T(arr::Array{Float64}; original::Bool = false)
     Q = q(arr)
     γ = get_γ(arr)
@@ -93,6 +121,20 @@ function rhs_S_T(arr::Array{Float64}; original::Bool = false)
 end
 
 
+"""
+    rhs_S_S(arr::Array{Float64}; original::Bool = false)
+
+# Arguments
+
+- `arr::Array{Float64}`: Array of length 26 containing the current state of the system at which the
+    RHS of the ODE is to be determined
+- `original::Bool`: If false then the modified version of the RHS of the ODE is returned and if true
+    then the original version as presented in the paper is used
+
+# Returns
+
+The RHS of the ODE describing the rate of change of the varialbe `S_S`
+"""
 function rhs_S_S(arr::Array{Float64}; original::Bool = false)
     Q = q(arr)
     γ = get_γ(arr)
@@ -125,6 +167,20 @@ function rhs_S_S(arr::Array{Float64}; original::Bool = false)
 end
 
 
+"""
+    rhs_S_IP(arr::Array{Float64}; original::Bool = false)
+
+# Arguments
+
+- `arr::Array{Float64}`: Array of length 26 containing the current state of the system at which the
+    RHS of the ODE is to be determined
+- `original::Bool`: If false then the modified version of the RHS of the ODE is returned and if true
+    then the original version as presented in the paper is used
+
+# Returns
+
+The RHS of the ODE describing the rate of change of the varialbe `S_IP`
+"""
 function rhs_S_IP(arr::Array{Float64}; original::Bool = false)
     Q = q(arr)
     γ = get_γ(arr)
@@ -155,6 +211,20 @@ function rhs_S_IP(arr::Array{Float64}; original::Bool = false)
 end
 
 
+"""
+    rhs_S_B(arr::Array{Float64}; original::Bool = false)
+
+# Arguments
+
+- `arr::Array{Float64}`: Array of length 26 containing the current state of the system at which the
+    RHS of the ODE is to be determined
+- `original::Bool`: If false then the modified version of the RHS of the ODE is returned and if true
+    then the original version as presented in the paper is used
+
+# Returns
+
+The RHS of the ODE describing the rate of change of the varialbe `S_B`
+"""
 function rhs_S_B(arr::Array{Float64}; original::Bool = false)
     Q = q(arr)
     η = get_η(arr)
@@ -184,11 +254,100 @@ function rhs_S_B(arr::Array{Float64}; original::Bool = false)
 end
 
 
-rhs_S_N(sys::System) = rhs_S_N(toArray(sys))
-rhs_S_T(sys::System) = rhs_S_T(toArray(sys))
-rhs_S_S(sys::System) = rhs_S_S(toArray(sys))
-rhs_S_IP(sys::System) = rhs_S_IP(toArray(sys))
-rhs_S_B(sys::System) = rhs_S_B(toArray(sys))
+"""
+    rhs_S_N(sys::System; original::Bool = false)
 
+# Arguments
+
+- `sys::System`: system containing the current state at which the RHS of the ODE is to be determined
+- `original::Bool`: If false then the modified version of the RHS of the ODE is returned and if true
+    then the original version as presented in the paper is used
+
+# Returns
+
+The RHS of the ODE describing the rate of change of the varialbe `S_N`
+"""
+rhs_S_N(sys::System; original::Bool = false) = rhs_S_N(toArray(sys), original = original)
+
+
+"""
+    rhs_S_T(sys::System; original::Bool = false)
+
+# Arguments
+
+- `sys::System`: system containing the current state at which the RHS of the ODE is to be determined
+- `original::Bool`: If false then the modified version of the RHS of the ODE is returned and if true
+    then the original version as presented in the paper is used
+
+# Returns
+
+The RHS of the ODE describing the rate of change of the varialbe `S_T`
+"""
+rhs_S_T(sys::System; original::Bool = false) = rhs_S_T(toArray(sys), original = original)
+
+
+"""
+    rhs_S_S(sys::System; original::Bool = false)
+
+# Arguments
+
+- `sys::System`: system containing the current state at which the RHS of the ODE is to be determined
+- `original::Bool`: If false then the modified version of the RHS of the ODE is returned and if true
+    then the original version as presented in the paper is used
+
+# Returns
+
+The RHS of the ODE describing the rate of change of the varialbe `S_S`
+"""
+rhs_S_S(sys::System; original::Bool = false) = rhs_S_S(toArray(sys), original = original)
+
+
+"""
+    rhs_S_IP(sys::System; original::Bool = false)
+
+# Arguments
+
+- `sys::System`: system containing the current state at which the RHS of the ODE is to be determined
+- `original::Bool`: If false then the modified version of the RHS of the ODE is returned and if true
+    then the original version as presented in the paper is used
+
+# Returns
+
+The RHS of the ODE describing the rate of change of the varialbe `S_IP`
+"""
+rhs_S_IP(sys::System; original::Bool = false) = rhs_S_IP(toArray(sys), original = original)
+
+
+"""
+    rhs_S_B(sys::System; original::Bool = false)
+
+# Arguments
+
+- `sys::System`: system containing the current state at which the RHS of the ODE is to be determined
+- `original::Bool`: If false then the modified version of the RHS of the ODE is returned and if true
+    then the original version as presented in the paper is used
+
+# Returns
+
+The RHS of the ODE describing the rate of change of the varialbe `S_B`
+"""
+rhs_S_B(sys::System; original::Bool = false) = rhs_S_B(toArray(sys), original = original)
+
+
+"""
+    get_q(arr::Array{Float64})
+
+Returns the value of q for an array describing a given system. 
+    To this end the euqations q = λ[α(Tₛ-Tₙ)+β(Sₙ-Sₛ)] and
+    Tₙ = μ⋅q+T₀ where solved for q
+"""
 get_q(arr::Array{Float64}) = q(arr)
+
+
+"""
+    get_q(sys::System)
+
+Returns the value of q of a given system. To this end the euqations q = λ[α(Tₛ-Tₙ)+β(Sₙ-Sₛ)] and
+    Tₙ = μ⋅q+T₀ where solved for q
+"""
 get_q(sys::System) = q(toArray(sys))

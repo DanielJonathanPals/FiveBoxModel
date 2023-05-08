@@ -30,25 +30,17 @@ end
 struct which contains the relevant parameters for running a given system. 
 
 # Fields
--'sys::System': System holding the initial conditions
--'integrationMethod': Method which the solver from DifferentialEquations will use
--'updateInterval::Number': Time after which the update! function will periodically be applied to
+
+-`sys::System`: System holding the initial conditions
+-`integrationMethod`: Method which the solver from DifferentialEquations will use
+-`updateInterval::Number`: Time after which the update! function will periodically be applied to
     the phaseDyn and paramDyn. Running the System in not to large time intervals also increases
     the numerical stability of the result
--'t_max::Number': Overall runtime 
--'dt::Number': Time difference of consecutive datapoints in the trajectory (This is not the dt
+-`t_max::Number`: Overall runtime 
+-`dt::Number`: Time difference of consecutive datapoints in the trajectory (This is not the dt
     used by the DifferentialEquations package to integrate the trajectory)
--'phaseDyn::PhaseDynamics'
--'paramDyn::ParameterDynamics'
-
-Can also be initialised via
-
-RunParameters(sys;
-            updateInterval = 1.,
-            t_max = 10.,
-            dt = 0.001,
-            phaseDyn = DeterministicPhaseDynamics,
-            paramDyn = fixedParameters)
+-`phaseDyn::PhaseDynamics`
+-`paramDyn::ParameterDynamics`
 """
 struct RunParameters
     sys::System
@@ -64,18 +56,29 @@ struct RunParameters
                             phaseDyn,
                             paramDyn)
         if !(isDivisible(t_max,dt))
-            error("'t_max'is not devisible by 'dt'")
+            error("`t_max`is not devisible by `dt`")
         end
         if !(isDivisible(updateInterval,dt))
-            error("'updateInterval'is not devisible by 'dt'")
+            error("`updateInterval`is not devisible by `dt`")
         end
         if !(isDivisible(t_max,updateInterval))
-            error("'t_max'is not devisible by 'updateInterval'")
+            error("`t_max`is not devisible by `updateInterval`")
         end
         new(sys,updateInterval,t_max,dt,phaseDyn,paramDyn)
     end
 end
 
+
+"""
+    function RunParameters(sys;
+        updateInterval = 1.,
+        t_max = 10.,
+        dt = 0.001,
+        phaseDyn = DeterministicPhaseDynamics,
+        paramDyn = fixedParameters)
+
+Alternative instantiation of an object of type `RunParameters`, with some default arguments.
+"""
 function RunParameters(sys;
                         updateInterval = 1.,
                         t_max = 10.,
@@ -89,12 +92,12 @@ end
 """
     runSystem(rp::RunParameters; update_system = true)
 
-Runs the productspace System encoded in 'rp' according to the parameters in 'rp' and returns the 
+Runs the productspace System encoded in `rp` according to the parameters in `rp` and returns the 
 full trajectory of the time evolution together with an array containing the respective times
-corresponding to the datapoints. If 'update_system == true' then the system 'rp.sys' is
+corresponding to the datapoints. If `update_system == true` then the system `rp.sys` is
 updated accordingly.
 """
-function runSystem(rp::RunParameters; update_system = true)
+function runSystem(rp::RunParameters; update_system = false)
     # The entire time Intervall is split up into subintervals each describing one period
     # between updates of the phase and parameter dynamics.
 
@@ -149,8 +152,8 @@ function runSystem(rp::RunParameters; update_system = true)
         # past_traj describes the entire trajectory up to the current time
         past_traj = traj[:,1:(i+1)*interval_length]
 
-        # update the SDEProblem according to the update rules encoded in 'rp.phaseDyn.update' and
-        # 'rp.paramDyn.update'
+        # update the SDEProblem according to the update rules encoded in `rp.phaseDyn.update` and
+        # `rp.paramDyn.update`
         update!(rp.phaseDyn,past_traj)
         update!(rp.paramDyn,past_traj)
 

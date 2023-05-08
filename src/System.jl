@@ -9,10 +9,10 @@ system
 
 # Fields
 
-- 'salinities::Array': Array of size (5,) of the form [S_N,S_T,S_S,S_IP,S_B] where each salinity is
+- `salinities::Array`: Array of size (5,) of the form [S_N,S_T,S_S,S_IP,S_B] where each salinity is
     given in units of psu (Any five element Array is reshaped into this form at initialization of 
     the stuct)
-- 'params::ParameterSet': Contains the current parameters describing the system
+- `params::ParameterSet`: Contains the current parameters describing the system
 """
 mutable struct System
     salinities::Array
@@ -35,7 +35,7 @@ end
             S_B::Number,
             params::ParameterSet)
 
-Returns an element of the struct System, of the form System([S_N,S_T,S_S,S_IP,S_B],params)
+Returns an element of the type `System`, of the form `System([S_N,S_T,S_S,S_IP,S_B],params)`
     (All salinities must be given in units of psu)
 """
 function System(;S_N::Number,
@@ -56,6 +56,12 @@ up_S_B!(sys::System, s::Number) = sys.salinities[5] = Float64(s)
 
 
 # FAMOUS System
+"""
+    FAMOUS
+
+Preset of a instance of type `System` which carries the initial values from the FAMOUS
+    experiment
+"""
 FAMOUS = System(S_N = 35.088,
                 S_T = 35.670,
                 S_S = 34.441,

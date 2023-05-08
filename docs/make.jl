@@ -14,6 +14,13 @@ makedocs(;
         assets=String[],
     ),
     pages=[
-        "Home" => "index.md",
+        "Home" => "home.md",
+        "Index" => "index.md",
+        "System" => "System.md",
+        "Parameter Dynamics" => "ParamDyn.md",
+        "Phase Dynamics" => "PhaseDynamics.md",
+        "Run System" => "RunSystem.md",
+        "Linearization" => "Linearization.md",
+        "Plot" => "Plot.md",
     ],
 )

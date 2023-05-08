@@ -22,6 +22,12 @@ function dq_dS_S(arr::Vector{Float64})
 end
 
 
+"""
+    jacobian(arr::Vector{Float64})
+
+Computes the Jacobian for at the given data of the RHS of the ODE describing the
+    time evolution of the salinities. 
+"""
 function jacobian(arr::Vector{Float64})
     Q = get_q(arr)
     γ = get_γ(arr)
@@ -131,9 +137,9 @@ end
 """
     get_eigvals(x::Array{Float64})
 
-If x is a Matrix then this function simply returns the eigenvalues of this Matrix. If instead x is
+If `x` is a Matrix then this function simply returns the eigenvalues of this Matrix. If instead `x` is
     a single datapoint of a trajectory it returns the eigenvalues of the linearized System at this
-    point and if x is a trajectory consisting of mulitple datapoints then a Vector is returned with
+    point and if `x` is a trajectory consisting of mulitple datapoints then a Vector is returned with
     the first entry being a Vector containining all the first eigenvalues, the second entry a Vector
     with all the second eigenvalues and so on.
 """
@@ -155,7 +161,7 @@ end
 
 
 """
-    get_eigvals(x::Array{Float64})
+    get_eigvals(x::Vector{Matrix{Float64}})
 
 This function returns a Vector where the first entry is again a Vector containing 
     all the first eigenvalues, the second entry is a Vector containing all the second
