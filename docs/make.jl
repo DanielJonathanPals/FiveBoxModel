@@ -24,3 +24,7 @@ makedocs(;
         "Plot" => "Plot.md",
     ],
 )
+
+deploydocs(
+    repo = "github.com/DanielJonathanPals/FiveBoxModel",
+)
