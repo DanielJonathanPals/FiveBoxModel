@@ -22,10 +22,6 @@ A mutable struct which encodes the RHS of the dynamics of the phase space
     package. If `noise_rate_prototype === nothing` then diagonal noise is used and `du` has the
     form of a Vector. Note that `noise_rate_prototype` must be the same must have the same sizes
     for corresponding instances of the ParameterDynamics and PhaseDynamics strucs.
-- `update::Union{Function,Nothing} = nothing`: This function describes how to update `g!` and 
-    `f!` if `update!` is applied to the respective object of the type `PhaseDynamics`. 
-    I.e. this function has takes argument and returns new functions `f!` and `g!` based of this 
-    argument. If `update = nothing` then `f!` and `g!` remain unchanged.
 
 If only `f!` and `g!` are given then `update` will be initialized to `update = nothing`
 """
@@ -33,34 +29,19 @@ mutable struct PhaseDynamics
     f!::Function
     g!::Function
     noise_rate_prototype::Union{Matrix{Float64},Nothing}
-    update::Union{Function,Nothing}
 end
 
 """
     PhaseDynamics(f!::Function, 
-                        g!::Function;   
-                        noise_rate_prototype::Union{Matrix{Float64},Nothing} = nothing)
+                    g!::Function;   
+                    noise_rate_prototype::Union{Matrix{Float64},Nothing} = nothing)
                     
-Alternative instantiation which returns an object of `ParameterDynamics` with `update = nothing`.
+Alternative instantiation which returns an object of `ParameterDynamics`.
 """
 function PhaseDynamics(f!::Function, 
-                        g!::Function,   
+                        g!::Function;   
                         noise_rate_prototype::Union{Matrix{Float64},Nothing} = nothing)
-    PhaseDynamics(f!,g!,noise_rate_prototype,nothing)
-end
-
-
-"""
-    update!(pd::PhaseDynamics, additionalInformation)
-
-Updates the function `pd.g` of the PhaseDynamics object according the to update rules specified in the
-function `pd.update`. The argument `pastTraj` entails the information of the so far
-recorded trajectory.
-"""
-function update!(pd::PhaseDynamics, pastTraj)
-    if !(pd.update === nothing)
-        pd.g! = pd.update(pastTraj)
-    end
+    PhaseDynamics(f!,g!,noise_rate_prototype)
 end
 
 
@@ -73,7 +54,7 @@ This function encodes the deterministic part of the ODEs describing the dynamics
     as argument for `f!` when ceating an instance of the type `ParameterDynamics`.
 """
 function deterministic_salinity_dynamics!(du, u, t_0, t)
-    du[1:5] = [rhs_S_N(u),rhs_S_T(u),rhs_S_S(u),rhs_S_IP(u),rhs_S_B(u)]
+    du[get_index["salinities"]] = [rhs_S_N(u),rhs_S_T(u),rhs_S_S(u),rhs_S_IP(u),rhs_S_B(u)]
 end
 
 
@@ -86,11 +67,11 @@ This function encodes the deterministic part of the ODEs describing the dynamics
     as argument for `f!` when ceating an instance of the type `ParameterDynamics`.
 """
 function original_deterministic_salinity_dynamics!(du, u, t_0, t)
-    du[1:5] = [rhs_S_N(u,original=true),
-                rhs_S_T(u,original=true),
-                rhs_S_S(u,original=true),
-                rhs_S_IP(u,original=true),
-                rhs_S_B(u,original=true)]
+    du[get_index["salinities"]] = [rhs_S_N(u,original=true),
+                                    rhs_S_T(u,original=true),
+                                    rhs_S_S(u,original=true),
+                                    rhs_S_IP(u,original=true),
+                                    rhs_S_B(u,original=true)]
 end
 
 
@@ -102,7 +83,7 @@ This function encodes the stochastic part of the ODEs describing the dynamics of
     as argument for `g!` when ceating an instance of the type `ParameterDynamics`.
 """
 function no_stochstic_salinity_dynamics!(du, u, t_0, t)
-    du[1:5] .= 0
+    du[get_index["salinities"]] .= 0
 end
 
 

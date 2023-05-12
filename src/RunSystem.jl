@@ -149,14 +149,6 @@ function runSystem(rp::RunParameters; update_system = false)
         # as this appreas as first entry of the following subinterval
         traj[:,i*interval_length+1:(i+1)*interval_length] = new_traj[:,1:end-1]
 
-        # past_traj describes the entire trajectory up to the current time
-        past_traj = traj[:,1:(i+1)*interval_length]
-
-        # update the SDEProblem according to the update rules encoded in `rp.phaseDyn.update` and
-        # `rp.paramDyn.update`
-        update!(rp.phaseDyn,past_traj)
-        update!(rp.paramDyn,past_traj)
-
         # Set the new initial conditions for the next subinterval
         u₀ = new_traj[:,end]
         t_0 = rp.updateInterval*(i+1)
@@ -166,12 +158,9 @@ function runSystem(rp::RunParameters; update_system = false)
             updateSystem!(rp.sys, u₀)
         end
 
-        # Update the equations describing the full Dynamics of both phase space and parameter space
-        f!(du,u,p,t) = (rp.phaseDyn.f!(du,u,p,t); rp.paramDyn.f!(du,u,p,t))
-        g!(du,u,p,t) = (rp.phaseDyn.g!(du,u,p,t); rp.paramDyn.g!(du,u,p,t))
-
         # Update the SDEProblem
-        prob = SDEProblem(f!,g!,u₀,tspan,t_0,noise_rate_prototype=rp.paramDyn.noise_rate_prototype)
+        # prob = SDEProblem(rhs["f!"],rhs["g!"],u₀,tspan,t_0,noise_rate_prototype=rp.paramDyn.noise_rate_prototype)
+        prob = remake(prob, u0 = u₀, p = t_0)
     end
     return traj, t
 end
